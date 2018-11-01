@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
 
+
 class App extends Component { // inherit Component obj
 
   state =  { // use to track data,
@@ -25,14 +26,36 @@ class App extends Component { // inherit Component obj
     });
   }
 
+  nameChangedHandler = (event) => {
+    this.setState({
+      persons: [ 
+        {name: 'Roger', age: "28"},
+        {name: event.target.value, age: "29"},
+        {name: "Jim", age: "27"},
+      ]    
+    });
+  }
+
   render() {
+
+    const style = {
+      // use camelCase for properties for inline styling
+      backgroundColor: 'white',
+      font: 'inherit',
+      border: '1px solid red',
+      padding: '8px',
+      cursor: 'pointer',
+    };
+
     return (
       <div className="App">
         <h1>Hello World!!!!!!</h1>
         <p>Lorem ipsum lorem lorem lorem</p>
         {/* reference the function, do NOT call ie '()' */}
         {/* bind to this, so as to define 'this' when the function is called, NOT defined */}
-        <button onClick={this.switchNameHandler.bind(this, 'Bob')}>Switch Name</button>
+        <button 
+          style={style} {/* pass style obj to style element */}
+          onClick={this.switchNameHandler.bind(this, 'Bob')}>Switch Name</button>
         {/* use this keyword because App is an Object */}
         <Person
           name={this.state.persons[0].name} 
@@ -41,7 +64,8 @@ class App extends Component { // inherit Component obj
           click={() => this.switchNameHandler('Bob!!')}>I like turtles.</Person>
         <Person 
           name={this.state.persons[1].name} 
-          age={this.state.persons[1].age} />
+          age={this.state.persons[1].age}
+          change={this.nameChangedHandler} />
         <Person 
           name={this.state.persons[2].name} 
           age={this.state.persons[2].age} />
