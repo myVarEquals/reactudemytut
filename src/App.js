@@ -14,21 +14,31 @@ class App extends Component { // inherit Component obj
     showPersons: false,
   }
   
-  switchNameHandler = (newName) => {
-    console.log('Clicked!');
-    // ALWAYS mutate state with .setState()
-    // setState is a method from Component Object
-    this.setState({
-      persons: [ 
-        {name: newName, age: "28"},
-        {name: "Brad", age: "29"},
-        {name: "Jim", age: "27"},
-      ]    
-    });
+  // switchNameHandler = (newName) => {
+  //   console.log('Clicked!');
+  //   // ALWAYS mutate state with .setState()
+  //   // setState is a method from Component Object
+  //   this.setState({
+  //     persons: [ 
+  //       {name: newName, age: "28"},
+  //       {name: "Brad", age: "29"},
+  //       {name: "Jim", age: "27"},
+  //     ]    
+  //   });
+  // }
+
+  deletePersonHandler = (personIndex) => {
+    // this creates a new object, do NOT mutate state directly!
+    // const persons = this.state.persons.slice(); old way
+    const persons = [...this.state.persons]; // ES6 spread
+    persons.splice(personIndex, 1);
+    this.setState({persons: persons});
   }
 
   togglePersonsHandler = () => {
-
+    const doesShow = this.state.showPersons;
+    // if false, set true, and vice versa
+    this.setState({showPersons: !doesShow});
   }
 
   nameChangedHandler = (event) => {
@@ -52,6 +62,24 @@ class App extends Component { // inherit Component obj
       cursor: 'pointer',
     };
 
+    // best practice for conditionally rendering content
+    let persons = null;
+    if(this.state.showPersons) {
+      // if true, populate persons variable, else dont
+      persons = (
+        <div>
+          {
+            this.state.persons.map((person, index) => {
+              return <Person 
+              click={() => this.deletePersonHandler(index)}
+              name={person.name} 
+              age={person.age} />
+            })
+          }
+        </div>
+      )
+    }
+
     return (
       <div className="App">
         <h1>Hello World!!!!!!</h1>
@@ -60,24 +88,8 @@ class App extends Component { // inherit Component obj
         {/* bind to this, so as to define 'this' when the function is called, NOT defined */}
         <button 
           style={style} /* pass style obj to style element */
-          onClick={this.togglePersonsHandler}>Switch Name</button> {/* use this keyword because App is an Object */}
-        {this.state.showPersons ? // check if true
-        <div>
-          <Person
-            name={this.state.persons[0].name} 
-            age={this.state.persons[0].age}
-            // alternative, calling anon arrow function, return function call, no need bind
-            click={() => this.switchNameHandler('Bob!!')}>I like turtles.</Person>
-          <Person 
-            name={this.state.persons[1].name} 
-            age={this.state.persons[1].age}
-            change={this.nameChangedHandler} />
-          <Person 
-            name={this.state.persons[2].name} 
-            age={this.state.persons[2].age} />
-        </div> : null // else dont render
-        }
-        
+          onClick={this.togglePersonsHandler}>Toggle List</button> {/* use this keyword because App is an Object */}
+        {persons}  
       </div>      
     );
 
