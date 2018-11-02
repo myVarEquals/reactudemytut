@@ -10,7 +10,8 @@ class App extends Component { // inherit Component obj
       {name: "Roger", age: "28"},
       {name: "Brad", age: "29"},
       {name: "Jim", age: "27"},
-    ]
+    ],
+    showPersons: false,
   }
   
   switchNameHandler = (newName) => {
@@ -24,6 +25,10 @@ class App extends Component { // inherit Component obj
         {name: "Jim", age: "27"},
       ]    
     });
+  }
+
+  togglePersonsHandler = () => {
+
   }
 
   nameChangedHandler = (event) => {
@@ -54,21 +59,25 @@ class App extends Component { // inherit Component obj
         {/* reference the function, do NOT call ie '()' */}
         {/* bind to this, so as to define 'this' when the function is called, NOT defined */}
         <button 
-          style={style} {/* pass style obj to style element */}
-          onClick={this.switchNameHandler.bind(this, 'Bob')}>Switch Name</button>
-        {/* use this keyword because App is an Object */}
-        <Person
-          name={this.state.persons[0].name} 
-          age={this.state.persons[0].age}
-          // alternative, calling anon arrow function, return function call, no need bind
-          click={() => this.switchNameHandler('Bob!!')}>I like turtles.</Person>
-        <Person 
-          name={this.state.persons[1].name} 
-          age={this.state.persons[1].age}
-          change={this.nameChangedHandler} />
-        <Person 
-          name={this.state.persons[2].name} 
-          age={this.state.persons[2].age} />
+          style={style} /* pass style obj to style element */
+          onClick={this.togglePersonsHandler}>Switch Name</button> {/* use this keyword because App is an Object */}
+        {this.state.showPersons ? // check if true
+        <div>
+          <Person
+            name={this.state.persons[0].name} 
+            age={this.state.persons[0].age}
+            // alternative, calling anon arrow function, return function call, no need bind
+            click={() => this.switchNameHandler('Bob!!')}>I like turtles.</Person>
+          <Person 
+            name={this.state.persons[1].name} 
+            age={this.state.persons[1].age}
+            change={this.nameChangedHandler} />
+          <Person 
+            name={this.state.persons[2].name} 
+            age={this.state.persons[2].age} />
+        </div> : null // else dont render
+        }
+        
       </div>      
     );
 
