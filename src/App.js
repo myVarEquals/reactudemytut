@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
+import Radium, { StyleRoot } from 'radium'; // higher order comp
 
 
 class App extends Component { // inherit Component obj
@@ -55,11 +56,16 @@ class App extends Component { // inherit Component obj
 
     const style = {
       // use camelCase for properties for inline styling
-      backgroundColor: 'white',
+      backgroundColor: 'green', // style green to open list
+      color: 'white',
       font: 'inherit',
-      border: '1px solid red',
+      border: '3px solid black',
       padding: '8px',
       cursor: 'pointer',
+      ':hover':  {
+        backgroundColor: 'lightgreen',
+        color: 'black'
+      }
     };
 
     // best practice for conditionally rendering content
@@ -78,19 +84,36 @@ class App extends Component { // inherit Component obj
           }
         </div>
       )
+      // style red to close list
+      style.backgroundColor = 'red';
+      style[':hover'] = {
+        backgroundColor: 'yellow',
+        color: 'black'
+      }
+    }
+
+    const classes = []
+    // push class names to be passed to html elements
+    if (this.state.persons.length <= 2) {
+      classes.push('red');
+    }
+    if (this.state.persons.length <= 1) {
+      classes.push('bold');
     }
 
     return (
-      <div className="App">
-        <h1>Hello World!!!!!!</h1>
-        <p>Lorem ipsum lorem lorem lorem</p>
-        {/* reference the function, do NOT call ie '()' */}
-        {/* bind to this, so as to define 'this' when the function is called, NOT defined */}
-        <button 
-          style={style} /* pass style obj to style element */
-          onClick={this.togglePersonsHandler}>Toggle List</button> {/* use this keyword because App is an Object */}
-        {persons}  
-      </div>      
+      <StyleRoot>
+        <div className="App">
+          <h1>Hello World!!!!!!</h1>
+          <p className={classes.join(' ')} >Lorem ipsum lorem lorem lorem</p>
+          {/* reference the function, do NOT call ie '()' */}
+          {/* bind to this, so as to define 'this' when the function is called, NOT defined */}
+          <button 
+            style={style} /* pass style obj to style attribute */
+            onClick={this.togglePersonsHandler}>Toggle List</button> {/* use this keyword because App is an Object */}
+          {persons}  
+        </div>
+      </StyleRoot>      
     );
 
     // is compiled to this...
@@ -98,4 +121,4 @@ class App extends Component { // inherit Component obj
   }
 }
 
-export default App;
+export default Radium(App);
