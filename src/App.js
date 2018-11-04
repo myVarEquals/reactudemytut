@@ -53,18 +53,9 @@ class App extends Component { // inherit Component obj
 
   render() {
 
-    const style = {
-      // use camelCase for properties for inline styling
-      backgroundColor: 'green', // style green to open list
-      color: 'white',
-      font: 'inherit',
-      border: '3px solid black',
-      padding: '8px',
-      cursor: 'pointer',      
-    };
-
     // best practice for conditionally rendering content
     let persons = null;
+    let btnClass = null;
     if(this.state.showPersons) {
       // if true, populate persons variable, else dont
       persons = (
@@ -79,8 +70,8 @@ class App extends Component { // inherit Component obj
           }
         </div>
       )
-      // style red to close list
-      style.backgroundColor = 'red';
+
+      btnClass = myStyles.red;
       
     }
 
@@ -100,8 +91,8 @@ class App extends Component { // inherit Component obj
           <p className={classes.join(' ')} >Lorem ipsum lorem lorem lorem</p>
           {/* reference the function, do NOT call ie '()' */}
           {/* bind to this, so as to define 'this' when the function is called, NOT defined */}
-          <button 
-            style={style} /* pass style obj to style attribute */
+          <button /* pass style obj to style attribute */
+            className={btnClass}
             onClick={this.togglePersonsHandler}>Toggle List</button> {/* use this keyword because App is an Object */}
           {persons}  
         </div> 
