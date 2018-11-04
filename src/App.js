@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import myStyles from './App.css'; // import CSS as object
 import Person from './Person/Person';
 
 
@@ -87,14 +87,15 @@ class App extends Component { // inherit Component obj
     const classes = [];
     // push class names to be passed to html elements
     if (this.state.persons.length <= 2) {
-      classes.push('red');
+      classes.push(myStyles.red);
     }
     if (this.state.persons.length <= 1) {
-      classes.push('bold');
+      classes.push(myStyles.bold);
     }
 
     return (
-        <div className="App">
+        // add style to element. it will have a unique name with a random hash (CSSmodules)
+        <div className={myStyles.App}> 
           <h1>Hello World!!!!!!</h1>
           <p className={classes.join(' ')} >Lorem ipsum lorem lorem lorem</p>
           {/* reference the function, do NOT call ie '()' */}
