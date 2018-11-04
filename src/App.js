@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import myStyles from './App.css'; // import CSS as object
 import Person from './Person/Person';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 
 class App extends Component { // inherit Component obj
 
   state =  { // use to track data,
     persons: [ // update as needed
-      {name: "Roger", age: "28"},
-      {name: "Brad", age: "29"},
-      {name: "Jim", age: "27"},
+      {id: 'egwg', name: "Roger", age: "28"},
+      {id: 'welgj', name: "Brad", age: "29"},
+      {id: 'wreoigj', name: "Jim", age: "27"},
     ],
     showPersons: false,
   }
@@ -41,13 +42,25 @@ class App extends Component { // inherit Component obj
     this.setState({showPersons: !doesShow});
   }
 
-  nameChangedHandler = (event) => {
+  nameChangedHandler = (event, id) => {
+    // find the person from state who's id matches the one were
+    // editing in the input field
+    const personIndex = this.state.persons.findIndex(p => {
+      return p.id === id;
+    });
+    // copy original person, do NOT mutate original state
+    const person = {
+      ...this.state.persons[personIndex]
+    };
+    // update copy with new value
+    person.name = event.target.value;
+    // copy original array of persons
+    const persons = [...this.state.persons];
+    // update element in array matching our id
+    persons[personIndex] = person;
+    // push new state
     this.setState({
-      persons: [ 
-        {name: 'Roger', age: "28"},
-        {name: event.target.value, age: "29"},
-        {name: "Jim", age: "27"},
-      ]    
+      persons: persons   
     });
   }
 
@@ -62,10 +75,15 @@ class App extends Component { // inherit Component obj
         <div>
           {
             this.state.persons.map((person, index) => {
-              return <Person 
-              click={() => this.deletePersonHandler(index)}
-              name={person.name} 
-              age={person.age} />
+              return ( // use an error boundary component to display error messages cleanly in production when there is a risk of error
+              <ErrorBoundary key={person.id}>
+                <Person 
+                click={() => this.deletePersonHandler(index)}
+                name={person.name} 
+                age={person.age}                
+                change={event => this.nameChangedHandler(event, person.id)} />
+              </ErrorBoundary>
+              )
             })
           }
         </div>
