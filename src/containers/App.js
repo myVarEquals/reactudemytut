@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import myStyles from './App.css'; // import CSS as object
-import Person from './Person/Person';
-import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
+import Persons from '../components/Persons/Persons';
+// import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 
 class App extends Component { // inherit Component obj
@@ -73,19 +73,10 @@ class App extends Component { // inherit Component obj
       // if true, populate persons variable, else dont
       persons = (
         <div>
-          {
-            this.state.persons.map((person, index) => {
-              return ( // use an error boundary component to display error messages cleanly in production when there is a risk of error
-              <ErrorBoundary key={person.id}>
-                <Person 
-                click={() => this.deletePersonHandler(index)}
-                name={person.name} 
-                age={person.age}                
-                change={event => this.nameChangedHandler(event, person.id)} />
-              </ErrorBoundary>
-              )
-            })
-          }
+          <Persons 
+          persons={this.state.persons}
+          clicked={this.deletePersonHandler}
+          changed={this.nameChangedHandler}/>
         </div>
       )
 
